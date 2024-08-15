@@ -27,8 +27,8 @@ module load nextflow/24.04.4
 export NXF_HOME=/data/devel/phylo_snv_v2/.nextflow
 export NXF_OPTS='-Xms1g -Xmx4g'
 
-#nextflow run main.nf -process.echo --myworflow prepare
-#nextflow run main.nf -process.echo --myworflow ksnp3
+nextflow run main.nf -process.echo -profile slurm --myworflow prepare
+nextflow run main.nf -process.echo -profile slurm --myworflow ksnp3
 
 cd /data/soft/snvphylnfc/
 
@@ -37,12 +37,12 @@ export NXF_SINGULARITY_CACHEDIR=/data/soft/snvphylnfc/Singularity_Containers
 
 cmd="nextflow run phac-nml/snvphylnfc -c /data/soft/snvphylnfc/myconf/slurm.config -profile singularity --window_size 20 --density_threshold 2  --min_coverage_depth 15 --min_mean_mapping_quality 30 --snv_abundance_ratio 0.75   --input ${snv_phyl_samplesheet} --refgenome ${fasta_reference} --outdir ${snv_phyl_res_dir}"
 
-#eval ${cmd}
+eval ${cmd}
 
 cd "${phylo_snv_path}"
 export NXF_HOME=/data/devel/phylo_snv_v2/.nextflow
 
-nextflow run main.nf -process.echo --myworflow parse_snvphy_output
+nextflow run main.nf -process.echo -profile slurm --myworflow parse_snvphy_output
 
 
 
