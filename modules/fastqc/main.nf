@@ -8,7 +8,7 @@ process FASTQC {
   tuple val(sample_name_prefix), path(rawseq),path(fastpseq)
 
   output:
-  path '*fastqc*'
+  path '*fastqc*', emit: fastqc_out
 
   script:
 

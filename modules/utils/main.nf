@@ -55,7 +55,7 @@ process BUILD_READS_FASTA_LIST {
 
 }
 
-process MAKE_SNV_PHYL_SAMPLESHEET {
+process MAKE_SNV_PHYL_SAMPLESHEET_A_SUPPRIMER {
 
   input:
   tuple val(sample_name),path(reads)

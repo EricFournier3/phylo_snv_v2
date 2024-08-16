@@ -21,6 +21,7 @@ process MAKE_DIRECTORIES{
    mkdir "${params.current_fasta_reads}"
    mkdir "${params.current_snv_phyl_parsed_snvtable_dir}"
    mkdir "${params.current_fastqc_dir}"
+   mkdir "${params.current_partage_basedir_snv_phyl}"
   fi
 
    touch "make_directory_done.txt"

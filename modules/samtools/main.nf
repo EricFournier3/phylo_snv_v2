@@ -8,6 +8,8 @@ process SAMTOOLS_STATS {
   tuple val(sample_name), path(bam), path(bam_index)
   tuple path(fasta_ref),path(amb),path(ann),path(bwt),path(pac),path(sa)
   
+  output:
+  tuple path("${sample_name}.flagstat"), path("${sample_name}.idxstats"), path("${sample_name}.stats"), emit: samtools_out
 
   script:
 

@@ -1,6 +1,7 @@
 process PARSE_SNV_TABLE {
 
   publishDir "${params.current_snv_phyl_parsed_snvtable_dir}", mode: 'copy'
+  publishDir "${params.current_partage_basedir_snv_phyl}", mode: 'copy'
 
   input:
   path(snvtable)
@@ -27,6 +28,7 @@ process PARSE_SNV_TABLE {
 
 process MAKE_GRAPETREE_NEWICK {
   publishDir "${params.current_snv_phyl_parsed_snvtable_dir}", mode: 'copy'
+  publishDir "${params.current_partage_basedir_snv_phyl}", mode: 'copy'
 
   input:
   path(grapetree_profile)
@@ -39,6 +41,40 @@ process MAKE_GRAPETREE_NEWICK {
   echo "IN MAKE_GRAPETREE_NEWICK"
 
   grapetree.py -p "${grapetree_profile}" -m MSTreeV2 > grapetree-tree.nwk
+
+  """
+
+}
+
+process MAKE_SNV_PHYL_SAMPLESHEET {
+
+  input:
+  tuple val(sample_name),path(reads)
+
+  script:
+
+  sample_name_split = sample_name.split('_')
+  sample_name_short = sample_name_split[0]
+
+  snvphyl_samplesheet = "${params.current_snv_phyl_samplesheet}"
+
+  """
+  #!/usr/bin/env python
+  import pandas as pd
+  import os
+
+  print("IN MAKE_SNV_PHYL_SAMPLESHEET")
+
+  mycolumns = ['sample','fastq_1','fastq_2','reference_assembly','metadata_1','metadata_2','metadata_3','metadata_4','metadata_5','metadata_6','metadata_7','metadata_8']
+
+  if os.path.exists("${snvphyl_samplesheet}"):
+      df = pd.read_csv("${snvphyl_samplesheet}",sep=",",index_col=False)
+      new_row = dict(zip(mycolumns,["${sample_name_short}","${params.current_fastp_reads}/${reads[0]}","${params.current_fastp_reads}/${reads[1]}","","","","","","","","",""]))
+      df = df.append(new_row,ignore_index=True)
+      df.to_csv("${snvphyl_samplesheet}",sep=",",index=False)
+  else:
+      df = pd.DataFrame([["${sample_name_short}","${params.current_fastp_reads}/${reads[0]}","${params.current_fastp_reads}/${reads[1]}","","","","","","","","",""]],columns=mycolumns)
+      df.to_csv("${snvphyl_samplesheet}",sep=",",index=False)
 
   """
 
