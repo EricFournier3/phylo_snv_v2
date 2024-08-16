@@ -12,7 +12,7 @@ workflow PHYLO_SNV_WF {
   PREPARE_WF()
  }else if(params.myworflow == 'ksnp3'){
   KSNP3_WF()
- }else if(params.myworflow == 'parse_snvphy_output'){
+ }else if(params.myworflow == 'parse_snvphyl_output'){
   PARSE_SNVPHYL_OUTPUT_WF()
  }else{
   println "NO WORKFLOW"
