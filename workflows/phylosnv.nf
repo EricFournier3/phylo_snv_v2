@@ -9,24 +9,106 @@ include {BWA; INDEX_REF} from '../modules/bwa/main'
 include {SAMTOOLS_STATS} from '../modules/samtools/main'
 include {MULTIQC} from '../modules/multiqc/main'
 
+// Color of text
+ANSI_RESET = "\u001B[0m"
+ANSI_RED = "\u001B[31m"
+ANSI_GREEN = "\u001B[32m"
+ANSI_YELLOW = "\u001B[33m";
+
+
 
 workflow TEST_WF {
+
+  workflow_name = "TEST_WF"
+
+  println(ANSI_GREEN + """\
+         \n
+          ======================== 
+            WORKFLOW TEST_WF
+          ========================
+         """.stripIndent()
+         + ANSI_RESET) 
   TEST()
+
+  workflow.onComplete {
+     ANSI_YELLOW = "\u001B[33m"
+     ANSI_RESET = "\u001B[0m"
+     println ( ANSI_YELLOW +  """ termine   ${workflow_name}"""   + ANSI_RESET)
+  }
 }
+  
 
 workflow PREPARE_WF {
+
+  workflow_name = "PREPARE_WF"
+
+  println(ANSI_GREEN + """\
+         \n
+          =============================================== 
+                       WORKFLOW PREPARE_WF
+                          => PROCESS <=
+                             ------- 
+                          - MAKE_DIRECTORIES 
+                          - IMPORT_FASTQ   
+          ===============================================
+                      >> INPUT PARAMETERS <<
+
+                         Species                             : ${params.species} 
+                         Output directory                    : ${params.current_out_dir}
+                         Partage output directory            : ${params.partage_basedir}
+
+         """.stripIndent()
+         + ANSI_RESET) 
+
   MAKE_DIRECTORIES(params.species,params.out_basedir,params.outdir_name)
   IMPORT_FASTQ(params.sample_sheet_in,MAKE_DIRECTORIES.out.flag_file)
+
+  workflow.onComplete {
+     ANSI_YELLOW = "\u001B[33m"
+     ANSI_RESET = "\u001B[0m"
+     println ( ANSI_YELLOW +  """ ================= Fin du WORKFLOW ${workflow_name} ==================="""   + ANSI_RESET)
+  }
 }
 
 workflow KSNP3_WF {
+
+  workflow_name = "KSNP3_WF"
+
+  println(ANSI_GREEN + """\
+         \n
+          =============================================== 
+                         WORKFLOW KSNP3_WF
+                           => PROCESS <= 
+                              -------
+                             - INDEX_REF 
+                             - FASTP   
+                             - BWA    
+                             - SAMTOOLS_STATS 
+                             - FASTQC 
+                             - MULTIQC  
+                             - FASTQ_TO_FASTA  
+                             - BUILD_READS_FASTA_LIST  
+                             - KSNP3 
+                             - COMPUTE_KSNP3_DISTANCE_MATRIX 
+                             - MAKE_SNV_PHYL_SAMPLESHEET 
+          ===============================================
+                      >> INPUT PARAMETERS <<
+
+                         Species                             : ${params.species} 
+                         Output directory                    : ${params.current_out_dir}
+                         Partage output directory            : ${params.partage_basedir}
+
+         """.stripIndent()
+         + ANSI_RESET) 
+
   fastq_pair_channel = channel.fromFilePairs("${params.current_fastq_raw}" + '/*_S*_L001_{R1,R2}_001.fastq.gz')
 
-  INDEX_REF("${params.ref_basedir}/${params.species}.fasta")
+  //TODO REACTIVER
+  //INDEX_REF("${params.ref_basedir}/${params.species}.fasta")
   //INDEX_REF.out.reference_fasta.view {it -> {"ref is ${it[0]} and  ann id ${it[2]}"}}
 
   //TODO REACTIVER
-  FASTP(fastq_pair_channel)
+  //FASTP(fastq_pair_channel)
   
   //TODO PAS BESOIN DE LA LIGNE SUIVANTE
   //fastp_channel = FASTP(fastq_pair_channel)
@@ -34,47 +116,79 @@ workflow KSNP3_WF {
   //FASTP.out.fastq_paired.view {it -> "${it}"} 
 
   //TODO REACTIVER
-  BWA(FASTP.out.fastq_paired,INDEX_REF.out.reference_fasta) 
+  //BWA(FASTP.out.fastq_paired,INDEX_REF.out.reference_fasta) 
 
   //BWA.out.bam_output.view {it -> "SAMPLE IS ${it[0]} and BAM IS ${it[1]}"}
 
-  SAMTOOLS_STATS(BWA.out.bam_output,INDEX_REF.out.reference_fasta)
+  //TODO REACTIVER
+  //SAMTOOLS_STATS(BWA.out.bam_output,INDEX_REF.out.reference_fasta)
 
 
   //TODO REACTIVER
-  fastq_raw_fastp_combined_channel = fastq_pair_channel.combine(FASTP.out.fastq_paired,by:0)
+  //fastq_raw_fastp_combined_channel = fastq_pair_channel.combine(FASTP.out.fastq_paired,by:0)
 
 
   //TODO REACTIVER
-  FASTQC(fastq_raw_fastp_combined_channel)
+  //FASTQC(fastq_raw_fastp_combined_channel)
 
   //TODO REACTIVER
-  qc_channel = FASTP.out.fastp_json.mix(SAMTOOLS_STATS.out.samtools_out,FASTQC.out.fastqc_out).collect()
+  //qc_channel = FASTP.out.fastp_json.mix(SAMTOOLS_STATS.out.samtools_out,FASTQC.out.fastqc_out).collect()
 
   //qc_channel.view {it -> "QC CHANNEL ${it}"}
 
-  MULTIQC(qc_channel)
+  //TODO REACTIVER
+  //MULTIQC(qc_channel)
 
 
   //TODO REACTIVER
-  FASTQ_TO_FASTA(FASTP.out.fastq_paired)
+  //FASTQ_TO_FASTA(FASTP.out.fastq_paired)
 
   //TODO REACTIVER
-  BUILD_READS_FASTA_LIST(FASTQ_TO_FASTA.out.fasta_out.collect())
+  //BUILD_READS_FASTA_LIST(FASTQ_TO_FASTA.out.fasta_out.collect())
 
   //TODO REACTIVER
-  KSNP3(BUILD_READS_FASTA_LIST.out.ksnp3_samples_list)
-
-  COMPUTE_KSNP3_DISTANCE_MATRIX(KSNP3.out.ksnp3_alignment)
+  //KSNP3(BUILD_READS_FASTA_LIST.out.ksnp3_samples_list)
 
   //TODO REACTIVER
-  MAKE_SNV_PHYL_SAMPLESHEET(FASTP.out.fastq_paired)
+  //COMPUTE_KSNP3_DISTANCE_MATRIX(KSNP3.out.ksnp3_alignment)
+
+  //TODO REACTIVER
+  //MAKE_SNV_PHYL_SAMPLESHEET(FASTP.out.fastq_paired)
+
+  workflow.onComplete {
+     ANSI_YELLOW = "\u001B[33m"
+     ANSI_RESET = "\u001B[0m"
+     println ( ANSI_YELLOW +  """ ================= Fin du WORKFLOW ${workflow_name} ==================="""   + ANSI_RESET)
+  }
 
 }
 
 workflow PARSE_SNVPHYL_OUTPUT_WF {
-  PARSE_SNV_TABLE(channel.fromPath("${params.current_snv_phyl_table}"),"${params.current_snv_phyl_parsed_snvtable_dir}","${params.out_grapetree_base_name}","${params.species}","${params.species}")
 
-  MAKE_GRAPETREE_NEWICK(PARSE_SNV_TABLE.out.grapetree_profile)
+  workflow_name = "KSNP3_WF"
+
+  println(ANSI_GREEN + """\
+         \n
+          =============================================== 
+                         WORKFLOW KSNP3_WF
+                           => PROCESS <= 
+                              -------
+                             - PARSE_SNV_TABLE 
+                             - MAKE_GRAPETREE_NEWICK
+          ===============================================
+                      >> INPUT PARAMETERS <<
+
+                         Species                             : ${params.species} 
+                         Output directory                    : ${params.current_out_dir}
+                         Partage output directory            : ${params.partage_basedir}
+
+         """.stripIndent()
+         + ANSI_RESET) 
+
+  //TODO REACTIVER
+  //PARSE_SNV_TABLE(channel.fromPath("${params.current_snv_phyl_table}"),"${params.current_snv_phyl_parsed_snvtable_dir}","${params.out_grapetree_base_name}","${params.species}","${params.species}")
+
+  //TODO REACTIVER
+  //MAKE_GRAPETREE_NEWICK(PARSE_SNV_TABLE.out.grapetree_profile)
 }
 
