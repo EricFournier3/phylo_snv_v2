@@ -2,7 +2,7 @@
 
 nextflow.enable.dsl = 2
 
-include { TEST_WF; PREPARE_WF; KSNP3_WF;PARSE_SNVPHYL_OUTPUT_WF } from './workflows/phylosnv'
+include { TEST_WF; PREPARE_WF; KSNP3_WF;PARSE_SNVPHYL_OUTPUT_WF;CLEAN_WF } from './workflows/phylosnv'
  
 workflow PHYLO_SNV_WF {
 
@@ -14,7 +14,10 @@ workflow PHYLO_SNV_WF {
   KSNP3_WF()
  }else if(params.myworflow == 'parse_snvphyl_output'){
   PARSE_SNVPHYL_OUTPUT_WF()
- }else{
+ }else if(params.myworflow == 'clean'){
+  CLEAN_WF()
+ }
+else{
   println "NO WORKFLOW"
  }
 
