@@ -15,10 +15,9 @@ else
   mode="soft"
 fi
 
-
 config_file=/data/${mode}/phylo_snv_v2/nextflow.config
 
-out_basedir=$(sed -n '/^out_basedir/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/out_basedir//g")
+out_basedir=$(sed -n '/^out_basedir/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/out_basedir//g" |  sed "s/\${params.mode}/${mode}/g") 
 
 species=$(sed -n '/^species/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/species//g")
 
@@ -62,8 +61,9 @@ export NXF_SINGULARITY_CACHEDIR=/data/soft/snvphylnfc/Singularity_Containers
 current_wf="snvphyl"
 cmd="nextflow run phac-nml/snvphylnfc -c /data/soft/snvphylnfc/myconf/myconfig.config -profile singularity --window_size 20 --density_threshold 2  --min_coverage_depth 15 --min_mean_mapping_quality 30 --snv_abundance_ratio 0.75   --input ${snv_phyl_samplesheet} --refgenome ${fasta_reference} --outdir ${snv_phyl_res_dir} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report/${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt"
 
+#echo ${cmd}
 #TODO REACTIVER
-#eval ${cmd}
+eval ${cmd}
 
 cd "${phylo_snv_path}"
 export NXF_HOME=/data/${mode}/phylo_snv_v2/.nextflow
@@ -71,16 +71,16 @@ export NXF_HOME=/data/${mode}/phylo_snv_v2/.nextflow
 current_wf="parse_snvphyl_output"
 
 #TODO REACTIVER
-#nextflow run main.nf -process.echo -profile slurm,with_report --myworflow ${current_wf} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report//${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt
+nextflow run main.nf -process.echo -profile slurm,with_report --myworflow ${current_wf} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report//${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt
 
 
 current_wf="clean"
 #TODO REACTIVER
-#nextflow run main.nf -process.echo -profile slurm --myworflow ${current_wf}
+nextflow run main.nf -process.echo -profile slurm --myworflow ${current_wf}
 
 rm_workdir_cmd="rm -r ${nextflow_workdir}"
 #TODO REACTIVER
-#eval ${rm_workdir_cmd}
+eval ${rm_workdir_cmd}
 
 
 
