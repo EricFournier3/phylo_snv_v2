@@ -14,7 +14,7 @@ process FASTQ_TO_FASTA {
   sample_name = sample_name_prefix.split('_')[0]
 
   """
-  echo "IN FASTQ_TO_FASTA"
+  #echo "IN FASTQ_TO_FASTA"
 
   cmd_1="seqtk seq -a  ${fastpseq[0]} > ${sample_name}_R1.fasta"
   cmd_2="seqtk seq -a  ${fastpseq[1]} > ${sample_name}_R2.fasta"
@@ -30,6 +30,44 @@ process FASTQ_TO_FASTA {
 }
 
 process BUILD_READS_FASTA_LIST {
+
+  publishDir "${myFile_basedir}", mode: 'copy', pattern: "*_filtered.txt"
+  publishDir "${params.current_filtred_samples_dir}", mode: 'copy', pattern: "rejected_samples.txt"
+
+  input:
+  val(reads_fasta_list)
+
+  output:
+  path "*_filtered.txt" , emit: ksnp3_samples_list
+  path "rejected_samples.txt" , emit: rejected_samples_file
+
+  script:
+
+  myFile = file("${params.current_ksnp3_samples_list}")
+  myFile_basedir = myFile.getParent()
+
+  //println "BASEDIR ${myFile_basedir}"
+  //println "WORKDIR ${workflow.workDir}"
+  //println "CURRENT WORKDIR ${PWD}"
+  //println "${task.baseDir}"
+  //println "${workDir}"
+
+  for (myfasta : reads_fasta_list){
+    mylist =  myfasta.toString().split('/')
+    fasta_name = mylist[mylist.size() - 1]
+    sample_name = fasta_name.split("\\.")[0]
+    myFile.append("${myfasta}\t${sample_name}\n")
+  }
+  
+  """
+  #echo "CURRENT WORKDIR BASH \${PWD}"
+  build_reads_fasta_list.py --unfiltered-list ${params.current_ksnp3_samples_list} --fastp-dir ${params.current_fastp_reads} --min-reads-count ${params.min_fastp_reads} --filtered-samples-dir  ${params.current_filtred_samples_dir}
+  """
+
+}
+
+
+process BUILD_READS_FASTA_LIST_OBSOLETE {
 
   input:
   val(reads_fasta_list)
@@ -49,53 +87,11 @@ process BUILD_READS_FASTA_LIST {
   }
   
   """
-  echo "IN BUILD_READS_FASTA_LIST"
+  #echo "IN BUILD_READS_FASTA_LIST"
   """
 
 
 }
-
-process MAKE_SNV_PHYL_SAMPLESHEET_A_SUPPRIMER {
-
-  input:
-  tuple val(sample_name),path(reads)
-
-  script:
-
-  sample_name_split = sample_name.split('_')
-  sample_name_short = sample_name_split[0]
-
-  snvphyl_samplesheet = "${params.current_snv_phyl_samplesheet}"
-
-  """
-  #!/usr/bin/env python
-  import pandas as pd
-  import os
-
-  print("IN MAKE_SNV_PHYL_SAMPLESHEET")
-
-  mycolumns = ['sample','fastq_1','fastq_2','reference_assembly','metadata_1','metadata_2','metadata_3','metadata_4','metadata_5','metadata_6','metadata_7','metadata_8']
-
-  if os.path.exists("${snvphyl_samplesheet}"):
-      df = pd.read_csv("${snvphyl_samplesheet}",sep=",",index_col=False)
-      new_row = dict(zip(mycolumns,["${sample_name_short}","${params.current_fastp_reads}/${reads[0]}","${params.current_fastp_reads}/${reads[1]}","","","","","","","","",""]))
-      df = df.append(new_row,ignore_index=True)
-      df.to_csv("${snvphyl_samplesheet}",sep=",",index=False)
-  else:
-      df = pd.DataFrame([["${sample_name_short}","${params.current_fastp_reads}/${reads[0]}","${params.current_fastp_reads}/${reads[1]}","","","","","","","","",""]],columns=mycolumns)
-      df.to_csv("${snvphyl_samplesheet}",sep=",",index=False)
-
-  """
-
-}
-
-
-
-
-
-
-
-
 
 
 
