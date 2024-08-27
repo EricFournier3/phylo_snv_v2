@@ -1,0 +1,123 @@
+
+params {
+
+//devel ou soft
+mode = "devel"
+
+//Minumum count fastp reads after clean. Sum of R1 + R2
+min_fastp_reads = 2300000
+
+species = "lmicdadei"
+params.test = "${params.species}_TEST"
+
+//DO NOT CHANGE
+ksnp3_res_dir_name = "ksnp3_res"
+
+//DO NOT CHANGE
+base_partage_basedir = "/mnt/Partage/LSPQ_Partage/temp_eric/DEBUG"
+
+//DO NOT CHANGE
+partage_basedir = "/mnt/Partage/LSPQ_Partage/temp_eric/DEBUG/${params.species}"
+
+
+//DO NOT CHANGE
+ref_basedir = "/data/${params.mode}/phylo_snv_v2/references"
+
+//DO NOT CHANGE
+nextseq_rawdata_basedir = "/data/run_raw_data/"
+
+//DO NOT CHANGE
+out_basedir = "/data/${params.mode}/phylo_snv_v2/out"
+
+outdir_name = "myout2"
+
+//DO NOT CHANGE
+current_partage_basedir = "${params.partage_basedir}/${params.outdir_name}"
+
+//DO NOT CHANGE
+current_partage_basedir_ksnp3 = "${params.current_partage_basedir}/${params.ksnp3_res_dir_name}"
+
+sample_sheet_in =  "/data/${params.mode}/phylo_snv_v2/samplesheet/sample_sheet_small.tsv"
+
+//DO NOT CHANGE
+current_out_dir = "${params.out_basedir}/${params.species}/${params.outdir_name}"
+
+//DO NOT CHANGE
+current_filtred_samples_dir = "${current_out_dir}/filtered_samples"
+
+//DO NOT CHANGE
+slurm_queue = "bioprod"
+
+//DO NOT CHANGE
+snv_phyl_res_dir = "snv_phyl_res"
+
+//DO NOT CHANGE
+snv_phyl_samplesheet = "snv_phyl_samplesheet.csv"
+
+//DO NOT CHANGE
+out_grapetree_base_name = 'grapetree'
+
+//DO NOT CHANGE
+current_fastq_raw = "${params.current_out_dir}/FASTQ_RAW"
+
+//DO NOT CHANGE
+current_fastp_reads = "${params.current_out_dir}/FASTP_READS"
+
+//DO NOT CHANGE
+current_fasta_reads = "${params.current_out_dir}/FASTA_READS"
+
+//DO NOT CHANGE
+current_ksnp3_samples_list = "${params.current_out_dir}/ksnp3_samples_list.txt"
+
+//DO NOT CHANGE
+current_snv_phyl_samplesheet = "${params.current_out_dir}/${params.snv_phyl_samplesheet}"
+
+//DO NOT CHANGE
+current_snv_phyl_res_dir = "${params.current_out_dir}/${params.snv_phyl_res_dir}"
+
+//DO NOT CHANGE
+current_partage_basedir_snv_phyl = "${params.current_partage_basedir}/${params.snv_phyl_res_dir}"
+
+//DO NOT CHANGE
+current_snv_phyl_table = "${params.current_snv_phyl_res_dir}/vcf2snv/snvTable.tsv"
+
+//DO NOT CHANGE
+current_ksnp3_res_dir = "${params.current_out_dir}/${params.ksnp3_res_dir_name}"
+
+//DO NOT CHANGE
+current_snv_phyl_parsed_snvtable_dir = "${params.current_out_dir}/snv_phyl_parsed_snvtable"
+
+//DO NOT CHANGE
+current_fastqc_dir = "${params.current_out_dir}/FASTQC"
+
+//DO NOT CHANGE
+base_workdir = "/data/${params.mode}/phylo_snv_v2/work" 
+
+//DO NOT CHANGE
+snvphyl_workdir = "/data/soft/snvphylnfc/work"
+
+}
+
+profiles {
+  slurm {
+    includeConfig 'conf/slurm.config'
+  }
+
+  with_report {
+
+    report.enabled = true
+    report.overwrite = true
+
+    timeline.enabled = true
+    timeline.overwrite = true
+
+    trace.enabled = true
+    trace.overwrite = true
+    trace.fields = 'task_id,hash,name,status,submit,duration,realtime,%cpu,%mem,start,complete,queue,workdir,script,hostname'
+
+    dag.enabled = true
+    dag.overwrite = true
+
+  }
+}
+
