@@ -38,5 +38,6 @@ json_file.close()
 
 if reads_count < min_reads_count:
     print(reads_count, " is less than ", min_reads_count)
-    cmd = "rm {0}.fastp.json {0}_*_trimmed_*.fastq.gz".format(sample_name)
-    print("CMD IS ",cmd)
+    #cmd = "rm {0}.fastp.json {0}_R1_001_trimmed_1.fastq.gz {0}_R2_001_trimmed_2.fastq.gz".format(sample_name)
+    #print("CMD IS ",cmd)
+    #os.system(cmd)
