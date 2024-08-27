@@ -14,7 +14,7 @@ process SAMTOOLS_STATS {
   script:
 
   """
-  echo "IN SAMTOOLS"
+  #echo "IN SAMTOOLS"
 
   samtools flagstat --threads "${task.cpus}" "${bam}" > "${sample_name}".flagstat
   samtools idxstats  "${bam}" > "${sample_name}".idxstats

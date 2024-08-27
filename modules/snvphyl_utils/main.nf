@@ -19,7 +19,7 @@ process PARSE_SNV_TABLE {
   script:
   
   """
-  echo "IN PARSE_SNV_TABLE"
+  #echo "IN PARSE_SNV_TABLE"
   parse_snvtable.py  --snv-table "${snvtable}" --ref-name "${myref_name}" --out-base-name "${myout_base_name}" --out-grapetree-base-name "${myout_grapetree_base_name}" --basedir-out "${params.current_snv_phyl_parsed_snvtable_dir}"
 
   """
@@ -38,7 +38,7 @@ process MAKE_GRAPETREE_NEWICK {
 
   script:
   """
-  echo "IN MAKE_GRAPETREE_NEWICK"
+  #echo "IN MAKE_GRAPETREE_NEWICK"
 
   grapetree.py -p "${grapetree_profile}" -m MSTreeV2 > grapetree-tree.nwk
 
@@ -50,6 +50,7 @@ process MAKE_SNV_PHYL_SAMPLESHEET {
 
   input:
   tuple val(sample_name),path(reads)
+  path(reject_samples_files) 
 
   script:
 
@@ -63,9 +64,27 @@ process MAKE_SNV_PHYL_SAMPLESHEET {
   import pandas as pd
   import os
 
-  print("IN MAKE_SNV_PHYL_SAMPLESHEET")
+  def check_if_rejected():
+      reject_samples_df = pd.read_csv("${reject_samples_files}",index_col = False)
+      reject_samples_list = list(reject_samples_df['SAMPLES'])
+
+      if "${sample_name_short}" in reject_samples_list:
+          return(True)
+
+      return(False)
+
+  #print("IN MAKE_SNV_PHYL_SAMPLESHEET")
 
   mycolumns = ['sample','fastq_1','fastq_2','reference_assembly','metadata_1','metadata_2','metadata_3','metadata_4','metadata_5','metadata_6','metadata_7','metadata_8']
+
+  rejected = check_if_rejected()
+
+
+  #print("${sample_name_short}", " is ",rejected)
+
+  if rejected:
+      exit(0)
+
 
   if os.path.exists("${snvphyl_samplesheet}"):
       df = pd.read_csv("${snvphyl_samplesheet}",sep=",",index_col=False)

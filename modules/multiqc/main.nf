@@ -13,7 +13,7 @@ process MULTIQC {
   
   """
   
-  echo "IN MULTIQC"
+  #echo "IN MULTIQC"
 
   multiqc ${qc_files} -o multiqc_data
 

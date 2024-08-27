@@ -16,7 +16,7 @@ process BWA {
 
   """
 
-  echo "IN BWA"
+  #echo "IN BWA"
 
   cmd_map="bwa mem ${fasta} ${reads[0]} ${reads[1]} -t  ${task.cpus}  > ${sample_name_short}.sam"
   eval "\${cmd_map}"
@@ -48,7 +48,7 @@ process INDEX_REF {
   script:
 
   """
-  echo "IN INDEX_REF"
+  #echo "IN INDEX_REF"
 
   bwa index -p "${fasta_ref}" "${fasta_ref}"   
   """

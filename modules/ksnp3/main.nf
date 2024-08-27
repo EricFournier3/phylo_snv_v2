@@ -1,4 +1,5 @@
 process KSNP3 {
+  executor 'local' //car tcsh n est pas install sur tout les noeuds. Le yum install ne fonctionne pas sur ces noeuds. Ne trouve pas le bon mirror
   errorStrategy 'ignore'
 
   input:
@@ -10,7 +11,7 @@ process KSNP3 {
   script:
 
   """
-  echo "IN KSNP3"
+  #echo "IN KSNP3"
 
   command="kSNP3 -in ${genome_list_path} -outdir ${params.current_ksnp3_res_dir} -k 19"
   #TODO REACTIVER
@@ -38,7 +39,7 @@ process COMPUTE_KSNP3_DISTANCE_MATRIX {
   script:
 
   """
-  echo "IN COMPUTE_KSNP3_DISTANCE_MATRIX"  
+  #echo "IN COMPUTE_KSNP3_DISTANCE_MATRIX"  
 
   compute_ksnp3_distance_matrix.py --ksnp3-alignment ${ksnp3_alignment}
 
