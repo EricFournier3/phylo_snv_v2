@@ -48,13 +48,14 @@ snv_phyl_samplesheet=${out_basedir}/${species}/${outdir_name}/${snv_phyl_samples
 
 ref_basedir=$(sed -n '/^ref_basedir/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/ref_basedir//g" | sed "s/\${params.mode}/${mode}/g")
 
-#echo ${ref_basedir}
-
 fasta_reference="${ref_basedir}/${species}.fasta"
 
+snv_phyl_window_size=$(sed -n '/^snv_phyl_window_size/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/snv_phyl_window_size//g")
+snv_phyl_density_threshold=$(sed -n '/^snv_phyl_density_threshold/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/snv_phyl_density_threshold//g")
+snv_phyl_min_coverage_depth=$(sed -n '/^snv_phyl_min_coverage_depth/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/snv_phyl_min_coverage_depth//g")
+snv_phyl_min_mean_mapping_quality=$(sed -n '/^snv_phyl_min_mean_mapping_quality/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/snv_phyl_min_mean_mapping_quality//g")
+snv_phyl_snv_abundance_ratio=$(sed -n '/^snv_phyl_snv_abundance_ratio/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/snv_phyl_snv_abundance_ratio//g")
 
-#TODO DESACTIVER
-exit 0
 
 module purge
 module load nextflow/24.04.4
@@ -78,7 +79,7 @@ export NXF_HOME=/data/soft/snvphylnfc/.nextflow
 export NXF_SINGULARITY_CACHEDIR=/data/soft/snvphylnfc/Singularity_Containers
 
 current_wf="snvphyl"
-cmd="nextflow run phac-nml/snvphylnfc -c /data/soft/snvphylnfc/myconf/myconfig.config -profile singularity --window_size 20 --density_threshold 2  --min_coverage_depth 15 --min_mean_mapping_quality 30 --snv_abundance_ratio 0.75   --input ${snv_phyl_samplesheet} --refgenome ${fasta_reference} --outdir ${snv_phyl_res_dir} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report/${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt"
+cmd="nextflow run phac-nml/snvphylnfc -c /data/soft/snvphylnfc/myconf/myconfig.config -profile singularity --window_size ${snv_phyl_window_size} --density_threshold ${snv_phyl_density_threshold}  --min_coverage_depth ${snv_phyl_min_coverage_depth} --min_mean_mapping_quality ${snv_phyl_min_mean_mapping_quality} --snv_abundance_ratio ${snv_phyl_snv_abundance_ratio}   --input ${snv_phyl_samplesheet} --refgenome ${fasta_reference} --outdir ${snv_phyl_res_dir} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report/${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt"
 
 #echo ${cmd}
 #TODO REACTIVER
