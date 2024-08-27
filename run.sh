@@ -1,7 +1,10 @@
 #!/bin/bash
 
 #commande
-#./run.sh
+#./run.sh nextflow.config.lmicdadei|nextflow.config.<espece_bacterienne>
+
+RED="\e[31m"
+ENDCOLOR="\e[0m"
 
 mode=""
 phylo_snv_path=$PWD
@@ -15,7 +18,16 @@ else
   mode="soft"
 fi
 
+config_file_tmp=${1}
 config_file=/data/${mode}/phylo_snv_v2/nextflow.config
+
+if [ "${#config_file_tmp}" -eq 0 ] || ! [ -f "/data/${mode}/phylo_snv_v2/${config_file_tmp}" ] 
+  then
+  echo -e "${RED}Error: missing config file${ENDCOLOR}\n"
+else
+ cp_cmd="cp /data/${mode}/phylo_snv_v2/${config_file_tmp} ${config_file}"
+ eval "${cp_cmd}"
+fi
 
 out_basedir=$(sed -n '/^out_basedir/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/out_basedir//g" |  sed "s/\${params.mode}/${mode}/g") 
 
@@ -39,6 +51,10 @@ ref_basedir=$(sed -n '/^ref_basedir/p' ${config_file} | sed "s/\"//g" |  sed -E 
 #echo ${ref_basedir}
 
 fasta_reference="${ref_basedir}/${species}.fasta"
+
+
+#TODO DESACTIVER
+exit 0
 
 module purge
 module load nextflow/24.04.4
