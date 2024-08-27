@@ -8,6 +8,7 @@ include {PARSE_SNV_TABLE; MAKE_GRAPETREE_NEWICK; MAKE_SNV_PHYL_SAMPLESHEET} from
 include {BWA; INDEX_REF} from '../modules/bwa/main'
 include {SAMTOOLS_STATS} from '../modules/samtools/main'
 include {MULTIQC} from '../modules/multiqc/main'
+include {CLEAN_OUT; CLEAN_WORK; CLEAN_SNVPHYL_WORK}  from '../modules/clean/main'
 
 // Color of text
 ANSI_RESET = "\u001B[0m"
@@ -24,7 +25,7 @@ workflow TEST_WF {
   println(ANSI_GREEN + """\
          \n
           ======================== 
-            WORKFLOW TEST_WF
+            WORKFLOW ${workflow_name}
           ========================
          """.stripIndent()
          + ANSI_RESET) 
@@ -45,7 +46,7 @@ workflow PREPARE_WF {
   println(ANSI_GREEN + """\
          \n
           =============================================== 
-                       WORKFLOW PREPARE_WF
+                       WORKFLOW ${workflow_name}
                           => PROCESS <=
                              ------- 
                           - MAKE_DIRECTORIES 
@@ -77,7 +78,7 @@ workflow KSNP3_WF {
   println(ANSI_GREEN + """\
          \n
           =============================================== 
-                         WORKFLOW KSNP3_WF
+                         WORKFLOW ${workflow_name}
                            => PROCESS <= 
                               -------
                              - INDEX_REF 
@@ -104,56 +105,57 @@ workflow KSNP3_WF {
   fastq_pair_channel = channel.fromFilePairs("${params.current_fastq_raw}" + '/*_S*_L001_{R1,R2}_001.fastq.gz')
 
   //TODO REACTIVER
-  //INDEX_REF("${params.ref_basedir}/${params.species}.fasta")
+  INDEX_REF("${params.ref_basedir}/${params.species}.fasta")
   //INDEX_REF.out.reference_fasta.view {it -> {"ref is ${it[0]} and  ann id ${it[2]}"}}
 
   //TODO REACTIVER
-  //FASTP(fastq_pair_channel)
-  
+  FASTP(fastq_pair_channel)
+ 
+ 
   //TODO PAS BESOIN DE LA LIGNE SUIVANTE
   //fastp_channel = FASTP(fastq_pair_channel)
 
   //FASTP.out.fastq_paired.view {it -> "${it}"} 
 
   //TODO REACTIVER
-  //BWA(FASTP.out.fastq_paired,INDEX_REF.out.reference_fasta) 
+  BWA(FASTP.out.fastq_paired,INDEX_REF.out.reference_fasta) 
 
   //BWA.out.bam_output.view {it -> "SAMPLE IS ${it[0]} and BAM IS ${it[1]}"}
 
   //TODO REACTIVER
-  //SAMTOOLS_STATS(BWA.out.bam_output,INDEX_REF.out.reference_fasta)
+  SAMTOOLS_STATS(BWA.out.bam_output,INDEX_REF.out.reference_fasta)
 
 
   //TODO REACTIVER
-  //fastq_raw_fastp_combined_channel = fastq_pair_channel.combine(FASTP.out.fastq_paired,by:0)
+  fastq_raw_fastp_combined_channel = fastq_pair_channel.combine(FASTP.out.fastq_paired,by:0)
 
 
   //TODO REACTIVER
-  //FASTQC(fastq_raw_fastp_combined_channel)
+  FASTQC(fastq_raw_fastp_combined_channel)
 
   //TODO REACTIVER
-  //qc_channel = FASTP.out.fastp_json.mix(SAMTOOLS_STATS.out.samtools_out,FASTQC.out.fastqc_out).collect()
+  qc_channel = FASTP.out.fastp_json.mix(SAMTOOLS_STATS.out.samtools_out,FASTQC.out.fastqc_out).collect()
 
   //qc_channel.view {it -> "QC CHANNEL ${it}"}
 
   //TODO REACTIVER
-  //MULTIQC(qc_channel)
+  MULTIQC(qc_channel)
 
 
   //TODO REACTIVER
-  //FASTQ_TO_FASTA(FASTP.out.fastq_paired)
+  FASTQ_TO_FASTA(FASTP.out.fastq_paired)
 
   //TODO REACTIVER
-  //BUILD_READS_FASTA_LIST(FASTQ_TO_FASTA.out.fasta_out.collect())
+  BUILD_READS_FASTA_LIST(FASTQ_TO_FASTA.out.fasta_out.collect())
 
   //TODO REACTIVER
-  //KSNP3(BUILD_READS_FASTA_LIST.out.ksnp3_samples_list)
+  KSNP3(BUILD_READS_FASTA_LIST.out.ksnp3_samples_list)
 
   //TODO REACTIVER
-  //COMPUTE_KSNP3_DISTANCE_MATRIX(KSNP3.out.ksnp3_alignment)
+  COMPUTE_KSNP3_DISTANCE_MATRIX(KSNP3.out.ksnp3_alignment)
 
   //TODO REACTIVER
-  //MAKE_SNV_PHYL_SAMPLESHEET(FASTP.out.fastq_paired)
+  MAKE_SNV_PHYL_SAMPLESHEET(FASTP.out.fastq_paired,BUILD_READS_FASTA_LIST.out.rejected_samples_file)
 
   workflow.onComplete {
      ANSI_YELLOW = "\u001B[33m"
@@ -165,12 +167,12 @@ workflow KSNP3_WF {
 
 workflow PARSE_SNVPHYL_OUTPUT_WF {
 
-  workflow_name = "KSNP3_WF"
+  workflow_name = "PARSE_SNVPHYL_OUTPUT_WF"
 
   println(ANSI_GREEN + """\
          \n
           =============================================== 
-                         WORKFLOW KSNP3_WF
+                         WORKFLOW ${workflow_name}
                            => PROCESS <= 
                               -------
                              - PARSE_SNV_TABLE 
@@ -186,9 +188,47 @@ workflow PARSE_SNVPHYL_OUTPUT_WF {
          + ANSI_RESET) 
 
   //TODO REACTIVER
-  //PARSE_SNV_TABLE(channel.fromPath("${params.current_snv_phyl_table}"),"${params.current_snv_phyl_parsed_snvtable_dir}","${params.out_grapetree_base_name}","${params.species}","${params.species}")
+  PARSE_SNV_TABLE(channel.fromPath("${params.current_snv_phyl_table}"),"${params.current_snv_phyl_parsed_snvtable_dir}","${params.out_grapetree_base_name}","${params.species}","${params.species}")
 
   //TODO REACTIVER
-  //MAKE_GRAPETREE_NEWICK(PARSE_SNV_TABLE.out.grapetree_profile)
+  MAKE_GRAPETREE_NEWICK(PARSE_SNV_TABLE.out.grapetree_profile)
+
+  workflow.onComplete {
+     ANSI_YELLOW = "\u001B[33m"
+     ANSI_RESET = "\u001B[0m"
+     println ( ANSI_YELLOW +  """ ================= Fin du WORKFLOW ${workflow_name} ==================="""   + ANSI_RESET)
+  }
 }
 
+workflow CLEAN_WF() {
+
+  workflow_name = "CLEAN_WF"
+
+  println(ANSI_GREEN + """\
+         \n
+          =============================================== 
+                         WORKFLOW ${workflow_name}
+                           => PROCESS <= 
+                              -------
+                             - PARSE_SNV_TABLE 
+                             - MAKE_GRAPETREE_NEWICK
+          ===============================================
+                      >> INPUT PARAMETERS <<
+
+                         Species                             : ${params.species} 
+                         Output directory                    : ${params.current_out_dir}
+                         Partage output directory            : ${params.partage_basedir}
+
+         """.stripIndent()
+         + ANSI_RESET) 
+
+  CLEAN_OUT()
+  CLEAN_SNVPHYL_WORK()
+
+
+  workflow.onComplete {
+     ANSI_YELLOW = "\u001B[33m"
+     ANSI_RESET = "\u001B[0m"
+     println ( ANSI_YELLOW +  """ ================= Fin du WORKFLOW ${workflow_name} ==================="""   + ANSI_RESET)
+  }
+}
