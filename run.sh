@@ -34,7 +34,10 @@ current_partage_basedir="${base_partage_basedir}"/${species}/"${outdir_name}"
 snv_phyl_samplesheet=$(sed -n '/^snv_phyl_samplesheet/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/^snv_phyl_samplesheet//g")
 snv_phyl_samplesheet=${out_basedir}/${species}/${outdir_name}/${snv_phyl_samplesheet}
 
-ref_basedir=$(sed -n '/^ref_basedir/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/ref_basedir//g")
+ref_basedir=$(sed -n '/^ref_basedir/p' ${config_file} | sed "s/\"//g" |  sed -E "s/\s+//g" | sed "s/=//g" | sed "s/ref_basedir//g" | sed "s/\${params.mode}/${mode}/g")
+
+#echo ${ref_basedir}
+
 fasta_reference="${ref_basedir}/${species}.fasta"
 
 module purge
@@ -72,7 +75,6 @@ current_wf="parse_snvphyl_output"
 
 #TODO REACTIVER
 nextflow run main.nf -process.echo -profile slurm,with_report --myworflow ${current_wf} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report//${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt
-
 
 current_wf="clean"
 #TODO REACTIVER
