@@ -7,7 +7,7 @@ L'une est basée sur les kmer et ne nécessite pas de génome de référence. El
 ![Diagramme sans nom-1724944430911 drawio](https://github.com/user-attachments/assets/d73d23b4-5533-4663-b008-d0e9c08702cf)
 
 ### Exécution du pipeline
-## Préparation
+#### Préparation
 Avant d'éxécuter le pipeline, l'utilisateur doit ajuster les deux fichiers suivants
 - __nextflow.config.xxxxxx__  localisé dans : xxxxxx étant l'identifiant 
 
