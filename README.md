@@ -9,7 +9,7 @@ L'une est basée sur les kmer et ne nécessite pas de génome de référence. El
 ### Exécution du pipeline
 ## Préparation
 Avant d'éxécuter le pipeline, l'utilisateur doit ajuster les deux fichiers suivants
-- nextflow.config.xxxxxx  localisé dans : xxxxxx étant l'identifiant 
+- __nextflow.config.xxxxxx__  localisé dans : xxxxxx étant l'identifiant 
 
 
 
