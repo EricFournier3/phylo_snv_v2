@@ -13,6 +13,8 @@ BIOIN-999
 #L00166407001LEGIO_S25_R1_001_trimmed_1.fastq.gz
 #L00166407001LEGIO_S25_R2_001_trimmed_2.fastq.gz
 
+### PAS BESOIN DE CE SCRIPT ####
+
 parser = argparse.ArgumentParser(description="Filter fastp reads bases on count")
 
 parser.add_argument('--sample-name',help="Sample Name",required=True)

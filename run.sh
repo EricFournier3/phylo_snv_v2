@@ -24,6 +24,7 @@ config_file=/data/${mode}/phylo_snv_v2/nextflow.config
 if [ "${#config_file_tmp}" -eq 0 ] || ! [ -f "/data/${mode}/phylo_snv_v2/${config_file_tmp}" ] 
   then
   echo -e "${RED}Error: missing config file${ENDCOLOR}\n"
+  exit 0
 else
  cp_cmd="cp /data/${mode}/phylo_snv_v2/${config_file_tmp} ${config_file}"
  eval "${cp_cmd}"

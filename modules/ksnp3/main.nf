@@ -13,7 +13,7 @@ process KSNP3 {
   """
   #echo "IN KSNP3"
 
-  command="kSNP3 -in ${genome_list_path} -outdir ${params.current_ksnp3_res_dir} -k 19"
+  command="kSNP3 -in ${genome_list_path} -outdir ${params.current_ksnp3_res_dir} -k ${params.ksnp3_kmer_length}"
   #TODO REACTIVER
   eval "\${command}"
 

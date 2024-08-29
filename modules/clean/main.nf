@@ -102,9 +102,9 @@ process CLEAN_SNVPHYL_WORK{
   script:
 
   """
-  echo "IN CLEAN_SNVPHYL_WORK"
+  #echo "IN CLEAN_SNVPHYL_WORK"
 
-  echo "${params.snvphyl_workdir}"
+  #echo "${params.snvphyl_workdir}"
   rm_cmd="rm -r ${params.snvphyl_workdir}"
   #echo \${rm_cmd}
   eval \${rm_cmd}
