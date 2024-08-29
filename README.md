@@ -11,12 +11,13 @@ L'une est basée sur les kmer et ne nécessite pas de génome de référence. El
 Avant d'éxécuter le pipeline, l'utilisateur doit ajuster les deux fichiers suivants
 - __nextflow.config.xxxxxx__  localisé dans /data/soft/phylo_snv_v2: xxxxxx étant l'identifiant spécifique à l'espèce bactérienne analysée. Modifier (au besoin) dans ce fichier tous les paramètres du bloc params qui ne son pas identifié par DO NOT CHANGE
 - Une Samples sheet en format tsv placée dans . Cette Samples sheet correspond à la valeur du paramètre sample_sheet_in du fichier de configuration nextflow.config.xxxxxx. Son format doit être le suivant:
-
-        | SAMPLE_NAME    | RUN     |
-        | --------       | ------- |
-        | Sample1        | RUN_A   |
-        | Sample2        | RUN_A   |
-        | Sample3        | RUN_B   |
+<center>
+| SAMPLE_NAME    | RUN     |
+| --------       | ------- |
+| Sample1        | RUN_A   |
+| Sample2        | RUN_A   |
+| Sample3        | RUN_B   |
+</center>
 
 
 
