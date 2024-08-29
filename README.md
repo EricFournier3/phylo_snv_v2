@@ -14,9 +14,9 @@ Avant d'éxécuter le pipeline, l'utilisateur doit ajuster les deux fichiers sui
 
 | SAMPLE_NAME    | RUN     |
 | --------       | ------- |
-| Sample1  | RUN_A   |
-| February | $80     |
-| March    | $420    |
+| Sample1        | RUN_A   |
+| Sample2        | RUN_A   |
+| Sample3        | RUN_B   |
 
 
 
