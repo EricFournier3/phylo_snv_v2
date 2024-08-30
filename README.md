@@ -10,7 +10,7 @@ L'une est basée sur les kmer et ne nécessite pas de génome de référence. El
 #### Préparation
 Avant d'éxécuter le pipeline, l'utilisateur doit ajuster les deux fichiers suivants
 - __nextflow.config.xxxxxx__  localisé dans /data/soft/phylo_snv_v2: xxxxxx étant l'identifiant spécifique à l'espèce bactérienne analysée. Modifier (au besoin) dans ce fichier tous les paramètres du bloc params qui ne son pas identifié par DO NOT CHANGE
-- Une Samples sheet en format tsv placée dans . Cette Samples sheet correspond à la valeur du paramètre sample_sheet_in du fichier de configuration nextflow.config.xxxxxx. Son format doit être le suivant:
+- Une Samples sheet en format tsv placée dans /data/soft/phylo_snv_v2/samplesheet. Cette Samples sheet correspond à la valeur du paramètre sample_sheet_in du fichier de configuration nextflow.config.xxxxxx. Son format doit être le suivant:
 
 | SAMPLE_NAME    | RUN     |
 | --------       | ------- |
@@ -18,7 +18,21 @@ Avant d'éxécuter le pipeline, l'utilisateur doit ajuster les deux fichiers sui
 | Sample2        | RUN_A   |
 | Sample3        | RUN_B   |
 
+Les runs correspondent aux runs de séquancage (données brutes uniquement) pacées dans /data/run_raw_data
 
+### Exécution
+Se placer dans le répertoire /data/soft/phylo_snv_v2 et exécuter la commande suivante
 
+```console
+(base) [foueri01@inspq.qc.ca@slurm10p phylo_snv_v2]$ ./run.sh nextflow.config.xxxxxx
+```
+### Sortie du pipeline
+Les résultats du pipeline sont produits à deux emplacements; localement sur slurm et sur le serveur de fichiers au niveau de S:Partage
 
+#### Sur slurm
+Les données intermédiaires et les résultats finaux produits sur slurm sont sauvegardés dans 
+```console
+/data/soft/phylo_snv_v2/out/<species>/<outdir_name>
+```
+<species> et <outdir_name> étant respectivement la valeur des paramètre __species__ et __outdir_name__ dans le fichier de configuration nextflow.config.xxxxxx
 
