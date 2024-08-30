@@ -65,11 +65,15 @@ Les données intermédiaires et les résultats finaux produits sur slurm sont sa
 
   ### Sur S:Partage
   Sur S:Partage, dans <base_partage_basedir>/<species>/<outdir_name> ne sont produits et copiés que les résultats d'intérêt pour l'utilisateur. <base_partage_basedir>, <species> , <outdir_name> correspondant respectivement aux valeurs de paramètres base_partage_basedir, species et outdir_name dans le fichiers de configuration nextflow.config.xxxxxx. L'organisation du sous répertoire <outdir_name> est la suivante;
-  - ksnp3_res
+  - ksnp3_res : Contient les fichiers de sortie de kSNP3
     * lll
     * 555
-  - hhh
+  - snv_phyl_res : Contient les fichiers de sortie de SNVPhyl
     * nnn
+  - multiqc_data : Contient le rapport global de qualité des données de séquencage
+    * jjj
+  - nextflow_report : Contient les rapports statistique d'exécution des workflow Nextflow
+    * mm
       
   
 
