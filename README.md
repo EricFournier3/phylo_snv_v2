@@ -65,15 +65,20 @@ Les données intermédiaires et les résultats finaux produits sur slurm sont sa
 
   ### Sur S:Partage
   Sur S:Partage, dans <base_partage_basedir>/<species>/<outdir_name> ne sont produits et copiés que les résultats d'intérêt pour l'utilisateur. <base_partage_basedir>, <species> , <outdir_name> correspondant respectivement aux valeurs de paramètres base_partage_basedir, species et outdir_name dans le fichiers de configuration nextflow.config.xxxxxx. L'organisation du sous répertoire <outdir_name> est la suivante;
-  - ksnp3_res : Contient les fichiers de sortie de kSNP3
-    * lll
-    * 555
-  - snv_phyl_res : Contient les fichiers de sortie de SNVPhyl
-    * nnn
+  - ksnp3_res : Contient les fichiers de sortie de kSNP3. Les fichiers d'intérêt sont les suivants;
+    * tree_tipAlleleCounts.parsimony.tre : l'arbre phylogénétique parcimonieux
+    * ksnp3_matrix_NombreDeSites_sites.csv : la matrice de distance. NombreDeSites étant le nombre de sites dans le pseudo-alignement
+  - snv_phyl_res : Contient les fichiers de sortie d'intérêt du workflow SNVPhyl. 
+    * grapetree-metadata.tsv : fichier indiquant à quel groupe appartient chacun des spécimens
+    * grapetree-profile.tsv
+    * grapetree-tree.nwk : le fichier arbre NST à visualiser dans GrapeTree
+    * lmicdadei-profile.tsv
+    * lmicdadei-strains.tsv
+    * snvMatrix.tsv : la matrice de distance
   - multiqc_data : Contient le rapport global de qualité des données de séquencage
-    * jjj
+    * multiqc_report.html
   - nextflow_report : Contient les rapports statistique d'exécution des workflow Nextflow
-    * mm
+
       
   
 
