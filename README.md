@@ -64,7 +64,7 @@ Les données intermédiaires et les résultats finaux produits sur slurm sont sa
 - snv_phyl_parsed_snvtable : Contient les fichiers (grapetree-tree.nwk et grapetree-metadata.tsv) input pour GrapeTree issus du traitement du fichier snv_phyl_res/vcf2snv/snvTable.tsv produit par SNVPhyl
 
   ### Sur S:Partage
-  Sur S:Partage, dans <base_partage_basedir>/<species>/<outdir_name> ne sont produits et copiés que les résultats d'intérêt pour l'utilisateur. <base_partage_basedir>, <species> , <outdir_name> correspondant respectivement aux valeurs de paramètres **base_partage_basedir**, **species** et **outdir_name** dans le fichiers de configuration nextflow.config.xxxxxx. L'organisation du sous répertoire <outdir_name> est la suivante;
+  Sur S:Partage, dans <base_partage_basedir>/\<species>/<outdir_name> ne sont produits et copiés que les résultats d'intérêt pour l'utilisateur. <base_partage_basedir>, <species> , <outdir_name> correspondant respectivement aux valeurs de paramètres **base_partage_basedir**, **species** et **outdir_name** dans le fichiers de configuration nextflow.config.xxxxxx. L'organisation du sous répertoire <outdir_name> est la suivante;
   - ksnp3_res : Contient les fichiers de sortie de kSNP3. Les fichiers d'intérêt sont les suivants;
     * tree_tipAlleleCounts.parsimony.tre : l'arbre phylogénétique parcimonieux
     * ksnp3_matrix_NombreDeSites_sites.csv : la matrice de distance. NombreDeSites étant le nombre de sites dans le pseudo-alignement
