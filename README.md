@@ -36,3 +36,19 @@ Les données intermédiaires et les résultats finaux produits sur slurm sont sa
 ```
  \<species> et <outdir_name> étant respectivement la valeur des paramètre __species__ et __outdir_name__ dans le fichier de configuration nextflow.config.xxxxxx
 
+ La structure interne est la suivante;
+ ```console
+.
+├── FASTA_READS
+├── FASTP_READS
+├── FASTQC
+├── FASTQ_RAW
+├── filtered_samples
+├── ksnp3_res
+├── ksnp3_samples_list_filtered.txt
+├── ksnp3_samples_list.txt
+├── snv_phyl_parsed_snvtable
+├── snv_phyl_res
+└── snv_phyl_samplesheet.csv
+```
+
