@@ -51,5 +51,15 @@ Les données intermédiaires et les résultats finaux produits sur slurm sont sa
 ├── snv_phyl_res
 └── snv_phyl_samplesheet.csv
 ```
-- FASTA_READS : 
+- FASTA_READS : Reads en format fasta. Un fichier fasta concaténé par spécimen (nettoyé à la fin du pipeline)
+- FASTP_READS : Paires de fichiers fastq.gz après traitement par fastp (nettoyé à la fin du pipeline)
+- FASTQC : Rapport de qualité fastq.gz avant et après le traitement fastp (nettoyé à la fin du pipeline)
+- FASTQ_RAW : Reads fastq.gz brutes (nettoyé à la fin du pipeline)
+- filtered_samples : Contient le fichier rejected_samples.txt avec la liste des échantillons non inclus dans l'analyse dû à un nombre insuffisant de reads (selon la valeur du paramètre min_fastp_reads)
+- ksnp3_res : Contient les fichiers de résultats kSNP3. L'arbre phylogénétique parcimonieux d'intérêt est le tree_tipAlleleCounts.parsimony.tre
+- ksnp3_samples_list.txt : Fichier liste de tous les spécimens en format input kSNP3
+- ksnp3_samples_list_filtered.txt : Comme ksnp3_samples_list.txt mais sans les spécimens inclus dans rejected_samples.txt. C'est donc le fichier input final utilisé par kSNP3
+- snv_phyl_samplesheet.csv : La Sample Sheet utilisée en input par SNVPhyl
+- snv_phyl_res : Le répertoire de résultats SNVPhyl
+- snv_phyl_parsed_snvtable : Contient les fichiers (grapetree-tree.nwk et grapetree-metadata.tsv) input pour GrapeTree issues du traitement du fichier snv_phyl_res/vcf2snv/snvTable.tsv produit par SNVPhyl
 
