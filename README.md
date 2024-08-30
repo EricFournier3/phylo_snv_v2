@@ -34,5 +34,5 @@ Les données intermédiaires et les résultats finaux produits sur slurm sont sa
 ```console
 /data/soft/phylo_snv_v2/out/<species>/<outdir_name>
 ```
-<species> et <outdir_name> étant respectivement la valeur des paramètre __species__ et __outdir_name__ dans le fichier de configuration nextflow.config.xxxxxx
+ <species> et <outdir_name> étant respectivement la valeur des paramètre __species__ et __outdir_name__ dans le fichier de configuration nextflow.config.xxxxxx
 
