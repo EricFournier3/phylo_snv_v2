@@ -22,6 +22,8 @@ process PARSE_SNV_TABLE {
   #echo "IN PARSE_SNV_TABLE"
   parse_snvtable.py  --snv-table "${snvtable}" --ref-name "${myref_name}" --out-base-name "${myout_base_name}" --out-grapetree-base-name "${myout_grapetree_base_name}" --basedir-out "${params.current_snv_phyl_parsed_snvtable_dir}"
 
+  cp ${params.current_snv_phyl_res_dir}/make/snvMatrix.tsv ${params.current_partage_basedir_snv_phyl}
+
   """
 
 }
