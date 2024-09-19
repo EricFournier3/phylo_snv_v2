@@ -4,7 +4,8 @@ Ce pipeline Nextflow déployé sur la grappe de calcul slurm génère des arbres
 L'une est basée sur les kmer et ne nécessite pas de génome de référence. Elle est implémenté dans l'outil [kSNP3](https://sourceforge.net/projects/ksnp/files/) L'autre utilise plutôt l'approche implémentée dans [SNVPhyl](https://github.com/phac-nml/snvphylnfc?tab=readme-ov-file) et consiste plutôt à aligner les reads sur un génome de référence et identifier les sites contenant au moins un nucléotide variant de haute qualité par rapport au génome de référence.  Dans les deux cas un pseudo-alignement multiple est produit et est utilisé en entrée pour produire un arbre phylogénétique. L'algorithme utilisé par kSNP3 est le Maximum de parcimonie (MP). SNVPhyl qui utilise quant à lui l'approche probabiliste Maximum de vraisemblance (ML). Les fichiers de sortie de SNVPhyl permettent également de construire un minimum spanning tree (MST) lequel peut-être visualisé dans [GrapeTree](https://github.com/achtman-lab/GrapeTree)
 
 ### Flowchart
-![Diagramme sans nom-1724944430911 drawio](https://github.com/user-attachments/assets/5cf56d4b-1fb9-42a7-b35d-ae00fb125666)
+![Diagramme sans nom-1724944430911 drawio](https://github.com/user-attachments/assets/bcb4d99c-0f78-4eda-b852-a2a4d1408ff1)
+
 
 ### Exécution du pipeline
 #### Préparation
