@@ -75,6 +75,8 @@ Les données intermédiaires et les résultats finaux produits sur slurm sont sa
     * lmicdadei-profile.tsv
     * lmicdadei-strains.tsv
     * snvMatrix.tsv : la matrice de distance
+    * phylogeneticTree.newick : l'arbre ML produit par SNVPhyl
+    * phylogeneticTreeStats.txt : statistoques produites durant la production de phylogeneticTree.newick
   - multiqc_data : Contient le rapport global de qualité des données de séquencage
     * multiqc_report.html
   - nextflow_report : Contient les rapports statistique d'exécution des workflow Nextflow
