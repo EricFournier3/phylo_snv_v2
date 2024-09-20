@@ -17,8 +17,8 @@ process FASTQC {
   """
   #echo "IN FASTQC"
 
-  fastqc -q --threads task.cpus ${rawseq[0]} ${rawseq[1]}
-  fastqc -q --threads task.cpus ${fastpseq[0]} ${fastpseq[1]}
+  fastqc -q --threads ${task.cpus} ${rawseq[0]} ${rawseq[1]}
+  fastqc -q --threads ${task.cpus} ${fastpseq[0]} ${fastpseq[1]}
 
   """
 
