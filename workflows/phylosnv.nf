@@ -154,8 +154,12 @@ workflow KSNP3_WF {
   //TODO REACTIVER
   COMPUTE_KSNP3_DISTANCE_MATRIX(KSNP3.out.ksnp3_alignment)
 
+  //FASTP.out.fastq_paired.collect().view {it -> "FASTP OUT COLLECT ${it}"}
+
   //TODO REACTIVER
-  MAKE_SNV_PHYL_SAMPLESHEET(FASTP.out.fastq_paired,BUILD_READS_FASTA_LIST.out.rejected_samples_file)
+  //BIOIN-1051
+  MAKE_SNV_PHYL_SAMPLESHEET(FASTP.out.fastq_paired.collect(),BUILD_READS_FASTA_LIST.out.rejected_samples_file)
+  //MAKE_SNV_PHYL_SAMPLESHEET(FASTP.out.fastq_paired,BUILD_READS_FASTA_LIST.out.rejected_samples_file)
 
   workflow.onComplete {
      ANSI_YELLOW = "\u001B[33m"
