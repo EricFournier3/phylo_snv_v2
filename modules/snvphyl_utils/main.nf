@@ -51,7 +51,8 @@ process MAKE_GRAPETREE_NEWICK {
 
 }
 
-process MAKE_SNV_PHYL_SAMPLESHEET {
+//BIOIN-1051 on met obsolete
+process MAKE_SNV_PHYL_SAMPLESHEET_OBSOLETE {
 
   input:
   tuple val(sample_name),path(reads)
@@ -77,7 +78,7 @@ process MAKE_SNV_PHYL_SAMPLESHEET {
           return(True)
 
       return(False)
-
+mycolumns = ['sample','fastq_1','fastq_2','reference_assembly','metadata_1','metadata_2','metadata_3','metadata_4','metadata_5','metadata_6','metadata_7','metadata_8']
   #print("IN MAKE_SNV_PHYL_SAMPLESHEET")
 
   mycolumns = ['sample','fastq_1','fastq_2','reference_assembly','metadata_1','metadata_2','metadata_3','metadata_4','metadata_5','metadata_6','metadata_7','metadata_8']
@@ -99,6 +100,64 @@ process MAKE_SNV_PHYL_SAMPLESHEET {
   else:
       df = pd.DataFrame([["${sample_name_short}","${params.current_fastp_reads}/${reads[0]}","${params.current_fastp_reads}/${reads[1]}","","","","","","","","",""]],columns=mycolumns)
       df.to_csv("${snvphyl_samplesheet}",sep=",",index=False)
+
+  """
+
+}
+
+//BIOIN-1051
+process MAKE_SNV_PHYL_SAMPLESHEET {
+
+  input:
+  val mytuple
+  path(reject_samples_files)
+
+  script:
+
+  snvphyl_samplesheet = "${params.current_snv_phyl_samplesheet}"
+
+  """
+  #!/usr/bin/env python
+  import pandas as pd
+  import os
+  import re
+
+  def check_if_rejected(mysample):
+      reject_samples_df = pd.read_csv("${reject_samples_files}",index_col = False)
+      reject_samples_list = list(reject_samples_df['SAMPLES'])
+
+      if mysample in reject_samples_list:
+          return(True)
+
+      return(False)
+
+  mystring = "${mytuple}"
+  mystring = mystring.replace('[','&').replace(',','&').replace(' ','&').replace(']','&')
+  myl = mystring.split('&')
+
+  mydict = {}
+
+  mycolumns = ['sample','fastq_1','fastq_2','reference_assembly','metadata_1','metadata_2','metadata_3','metadata_4','metadata_5','metadata_6','metadata_7','metadata_8']
+
+  df = pd.DataFrame(columns=mycolumns)
+
+  for elem in myl:
+      if re.search("R1_001_trimmed_1.fastq.gz",elem):
+          sample = os.path.basename(elem).split('_')[0]
+
+          rejected = check_if_rejected(sample)
+
+          if rejected:
+              continue
+
+          if not sample in mydict:
+              new_row = dict(zip(mycolumns,[sample,elem,re.sub(r"R1_001_trimmed_1.fastq.gz","R2_001_trimmed_2.fastq.gz",elem),"","","","","","","","",""]))
+
+              df = df.append(new_row,ignore_index=True)
+
+
+  df.to_csv("${snvphyl_samplesheet}",sep=",",index=False)
+
 
   """
 
