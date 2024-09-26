@@ -70,9 +70,13 @@ current_wf="prepare"
 #TODO REACTIVER
 nextflow run main.nf -process.echo -profile slurm --myworflow ${current_wf} 
 
+sleep 10s
+
 current_wf="ksnp3"
 #TODO REACTIVER
 nextflow run main.nf -process.echo -profile slurm,with_report --myworflow ${current_wf} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report/${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt
+
+sleep 10s
 
 cd /data/soft/snvphylnfc/
 
@@ -81,6 +85,9 @@ export NXF_SINGULARITY_CACHEDIR=/data/soft/snvphylnfc/Singularity_Containers
 
 current_wf="snvphyl"
 cmd="nextflow run phac-nml/snvphylnfc -c /data/soft/snvphylnfc/myconf/myconfig.config -profile singularity --window_size ${snv_phyl_window_size} --density_threshold ${snv_phyl_density_threshold}  --min_coverage_depth ${snv_phyl_min_coverage_depth} --min_mean_mapping_quality ${snv_phyl_min_mean_mapping_quality} --snv_abundance_ratio ${snv_phyl_snv_abundance_ratio}   --input ${snv_phyl_samplesheet} --refgenome ${fasta_reference} --outdir ${snv_phyl_res_dir} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report/${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt"
+
+
+sleep 10s
 
 #echo ${cmd}
 #TODO REACTIVER
@@ -92,11 +99,15 @@ export NXF_HOME=/data/${mode}/phylo_snv_v2/.nextflow
 current_wf="parse_snvphyl_output"
 
 #TODO REACTIVER
-nextflow run main.nf -process.echo -profile slurm,with_report --myworflow ${current_wf} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report//${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt
+nextflow run main.nf -process.echo -profile slurm,with_report --myworflow ${current_wf} -with-report "${current_partage_basedir}"/nextflow_report/${current_wf}_report.html -with-timeline "${current_partage_basedir}"/nextflow_report/${current_wf}_timeline.html -with-dag "${current_partage_basedir}"/nextflow_report/${current_wf}_dag.html -with-trace  "${current_partage_basedir}"/nextflow_report/${current_wf}_trace.txt
+
+sleep 10s
 
 current_wf="clean"
 #TODO REACTIVER
 nextflow run main.nf -process.echo -profile slurm --myworflow ${current_wf}
+
+sleep 10s
 
 rm_workdir_cmd="rm -r ${nextflow_workdir}"
 #TODO REACTIVER
