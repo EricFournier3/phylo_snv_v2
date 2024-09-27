@@ -51,10 +51,36 @@ process MAKE_DIRECTORIES{
 
 }
 
+//BIOIN-1054
+process PREPARE_SAMPLE_SHEET{
+
+  publishDir "${params.current_out_dir}", mode: 'copy',   pattern: "sample_sheet.tsv"
+
+  input:
+  path(samples_list_file)
+  path(makedir_flag_file)
+  path(samples_index_file)
+
+  output:
+  path("sample_sheet.tsv"), emit: sample_sheet
+
+  script:
+
+  """
+  #echo "IN PREPARE_SAMPLE_SHEET"
+  #echo "${samples_list_file}"
+  #echo "${makedir_flag_file}"
+  #echo "${samples_index_file}"
+
+  build_samples_sheet.py --sample-list-file "${samples_list_file}"  --sample-index-file "${samples_index_file}"
+  """
+
+}
+
+//BIOIN-1054
 process IMPORT_FASTQ{
   input:
   path(sample_sheet)
-  path(makedir_flag_file)
 
   script:
 
