@@ -36,6 +36,7 @@ merge_df = merge_df.append(d4,ignore_index=True)
 merge_df = merge_df.loc[~merge_df['RUN_NAME'].str.contains('_OLD'),:]
 merge_df = merge_df.sort_values(by=['SAMPLE','RUN_NAME'],ascending=[True,True])
 merge_df = merge_df.drop_duplicates(subset=['SAMPLE'],keep='last')
+merge_df = merge_df.rename(columns={'SAMPLE':'SAMPLE_NAME'})
 
 merge_df.to_csv("sample_sheet.tsv",sep="\t",index=False)
 
