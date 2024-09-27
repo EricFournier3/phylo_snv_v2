@@ -1,5 +1,5 @@
 include {TEST} from '../modules/test/main'
-include {MAKE_DIRECTORIES; IMPORT_FASTQ} from '../modules/prepare/main'
+include {MAKE_DIRECTORIES; IMPORT_FASTQ; PREPARE_SAMPLE_SHEET} from '../modules/prepare/main'
 include {FASTP} from '../modules/fastp/main'
 include {FASTQC} from '../modules/fastqc/main'
 include {FASTQ_TO_FASTA; BUILD_READS_FASTA_LIST} from '../modules/utils/main'
@@ -50,6 +50,7 @@ workflow PREPARE_WF {
                           => PROCESS <=
                              ------- 
                           - MAKE_DIRECTORIES 
+                          - PREPARE_SAMPLE_SHEET
                           - IMPORT_FASTQ   
           ===============================================
                       >> INPUT PARAMETERS <<
@@ -57,12 +58,20 @@ workflow PREPARE_WF {
                          Species                             : ${params.species} 
                          Output directory                    : ${params.current_out_dir}
                          Partage output directory            : ${params.partage_basedir}
+                         Samples list files                  : ${params.sample_list_in}
 
          """.stripIndent()
          + ANSI_RESET) 
 
   MAKE_DIRECTORIES(params.species,params.out_basedir,params.outdir_name)
-  IMPORT_FASTQ(params.sample_sheet_in,MAKE_DIRECTORIES.out.flag_file)
+
+  //BIOIN-1054
+  PREPARE_SAMPLE_SHEET(params.sample_list_in,MAKE_DIRECTORIES.out.flag_file,params.samples_index_file)
+
+  //BIOIN-1054
+  //TODO REACTIVER
+  IMPORT_FASTQ(PREPARE_SAMPLE_SHEET.out.sample_sheet)
+  
 
   workflow.onComplete {
      ANSI_YELLOW = "\u001B[33m"
