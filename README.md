@@ -4,8 +4,7 @@ Ce pipeline Nextflow déployé sur la grappe de calcul slurm génère des arbres
 L'une est basée sur les kmer et ne nécessite pas de génome de référence. Elle est implémenté dans l'outil [kSNP3](https://sourceforge.net/projects/ksnp/files/) L'autre utilise plutôt l'approche implémentée dans [SNVPhyl](https://github.com/phac-nml/snvphylnfc?tab=readme-ov-file) et consiste plutôt à aligner les reads sur un génome de référence et identifier les sites contenant au moins un nucléotide variant de haute qualité par rapport au génome de référence.  Dans les deux cas un pseudo-alignement multiple est produit et est utilisé en entrée pour produire un arbre phylogénétique. L'algorithme utilisé par kSNP3 est le Maximum de parcimonie (MP). SNVPhyl qui utilise quant à lui l'approche probabiliste Maximum de vraisemblance (ML). Les fichiers de sortie de SNVPhyl permettent également de construire un minimum spanning tree (MST) lequel peut-être visualisé dans [GrapeTree](https://github.com/achtman-lab/GrapeTree)
 
 ### Flowchart
-![Diagramme sans nom-1724944430911 drawio](https://github.com/user-attachments/assets/bcb4d99c-0f78-4eda-b852-a2a4d1408ff1)
-
+![Diagramme sans nom-1724944430911 drawio](https://github.com/user-attachments/assets/36742c85-fede-4822-a494-ddb6d7606d0c)
 
 ### Exécution du pipeline
 #### Préparation
@@ -13,11 +12,11 @@ Avant d'éxécuter le pipeline, l'utilisateur doit ajuster/créer les deux fichi
 - __nextflow.config.xxxxxx__  localisé dans /data/soft/phylo_snv_v2: xxxxxx étant l'identifiant spécifique à l'espèce bactérienne analysée. Modifier (au besoin) dans ce fichier tous les paramètres du bloc **params** qui ne son pas identifié par DO NOT CHANGE
 - Une Samples sheet en format tsv placée dans /data/soft/phylo_snv_v2/samplesheet. Cette Samples sheet correspond à la valeur du paramètre **sample_sheet_in** du fichier de configuration nextflow.config.xxxxxx. Son format doit être le suivant:
 
-| SAMPLE_NAME    | RUN     |
-| --------       | ------- |
-| Sample1        | RUN_A   |
-| Sample2        | RUN_A   |
-| Sample3        | RUN_B   |
+| SAMPLE_NAME    | 
+| --------       | 
+| Sample1        | 
+| Sample2        | 
+| Sample3        | 
 
 La colonne RUN correspond aux runs de séquancage (données brutes uniquement) pacées dans /data/run_raw_data sur la grappe de calculs slurm
 
