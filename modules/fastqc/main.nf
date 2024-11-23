@@ -1,4 +1,5 @@
 process FASTQC {
+  cpus 10
 
   publishDir "${params.current_fastqc_dir}", mode: 'copy'
 
